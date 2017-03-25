@@ -15,8 +15,9 @@ router.post('/new', function(req, res, next) {
         {
             name: req.body.name,
             description: req.body.description,
-            zip: req.body.location,
+            zip: req.body.zip,
             timeStamp: new Date
+
         }
     );
     console.log(newEvent);
@@ -32,13 +33,8 @@ router.post('/new', function(req, res, next) {
     });
 });
 
-router.get('/events/:lat/:long', function(req, res, next) {
-    var lat = req.params.lat;
-    var long = req.params.long;
-
-
-    console.log("Latitude and longitude received. lat:" + lat + ", long: " + long);
-    Event.find({}, function(error, events){
+router.get('/events/:zip', function(req, res, next) {
+    Event.find({'zip' : req.params.zip}, function(error, events){
         res.send(events);
     });
 });
