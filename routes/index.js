@@ -1,4 +1,5 @@
 var express = require('express');
+var db = require('../db/connection.js');
 var router = express.Router();
 
 /* GET home page. */
@@ -12,11 +13,8 @@ router.post('/api/new', function(req, res, next) {
 });
 
 router.get('/api/events', function(req, res, next) {
-  res.send('<h1>This will be a list</h1>' +
-      '<ul>' +
-          '<li>List item 1</li>' +
-          '<li>List item 1</li>' +
-      '</ul>');
+    var results = db.events.find();
+  res.send(results);
 });
 
 

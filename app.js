@@ -4,6 +4,8 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+// var mongoose = require('mongoose');
+var connection = require('./db/connection.js');
 
 var index = require('./routes/index');
 var users = require('./routes/users');
@@ -12,6 +14,10 @@ var app = express();
 
 
 app.set('port', process.env.PORT || 3000);
+
+// mongoose.connect('mongodb://root:root@ds025239.mlab.com:25239/events_db');
+// var db = mongoose.connection;
+// db.on('error', console.error.bind(console, 'Connection error'));
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
