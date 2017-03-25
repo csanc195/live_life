@@ -1,5 +1,8 @@
 var express = require('express');
-var Events = require('../db/connection.js');
+var db = require('../db/connection.js');
+var Event = require('../models/event.js');
+
+
 var router = express.Router();
 
 /* GET home page. */
@@ -13,7 +16,8 @@ router.post('/api/new', function(req, res, next) {
 });
 
 router.get('/api/events', function(req, res, next) {
-    var results = Events.find({}, function(error, events){
+
+    Event.find({}, function(error, events){
         res.send(events);
     });
 });
