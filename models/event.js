@@ -1,6 +1,6 @@
 var mongoose = require("mongoose");
 
-var PostSchema = new mongoose.Schema({
+var EventSchema = new mongoose.Schema({
 	name: {
 		type: String,
 		required: true,

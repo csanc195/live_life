@@ -12,13 +12,6 @@ var users = require('./routes/users');
 
 var app = express();
 
-
-app.set('port', process.env.PORT || 3000);
-
-// mongoose.connect('mongodb://root:root@ds025239.mlab.com:25239/events_db');
-// var db = mongoose.connection;
-// db.on('error', console.error.bind(console, 'Connection error'));
-
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'hbs');
@@ -57,11 +50,6 @@ app.use(function(err, req, res, next) {
   // render the error page
   res.status(err.status || 500);
   res.render('error');
-});
-
-app.listen(app.get('port'), function(){
-  console.log('Express started on http://localhost:' +
-  app.get('port') + '; press Ctr-C to terminate.');
 });
 
 module.exports = app;
