@@ -10,11 +10,12 @@ var EventSchema = new mongoose.Schema({
 		required:true,
 		trim:true,
 	},
-	postBody: {
-		type: String,
-		required: true,
-		trim: true
+	zip: {
+	    type: String,
+    	required:true,
+    	trim:true,
 	},
+
 	timeStamp: {
 		type: Date,
 		required: true,
