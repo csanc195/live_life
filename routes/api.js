@@ -32,8 +32,12 @@ router.post('/new', function(req, res, next) {
     });
 });
 
-router.get('/events', function(req, res, next) {
+router.get('/events/:lat/:long', function(req, res, next) {
+    var lat = req.params.lat;
+    var long = req.params.long;
 
+
+    console.log("Latitude and longitude received. lat:" + lat + ", long: " + long);
     Event.find({}, function(error, events){
         res.send(events);
     });
