@@ -10,8 +10,26 @@ var router = express.Router();
 
 /* GET home page. */
 router.post('/new', function(req, res, next) {
-    console.log('Received: ' + req.body.title + ' at ' + req.body.description);
-    // res.redirect('/');
+
+    var newEvent = new Event(
+        {
+            name: req.body.name,
+            description: req.body.description,
+            zip: req.body.location,
+            timeStamp: new Date
+        }
+    );
+    console.log(newEvent);
+
+    newEvent.save(function(error, resp){
+
+        if(error){
+            console.log(error.errors);
+            return next(error);
+        }else{
+            return res.send("Event created!")
+        }
+    });
 });
 
 router.get('/events', function(req, res, next) {
@@ -23,6 +41,13 @@ router.get('/events', function(req, res, next) {
 
 router.get('/events/:id', function(req, res, next) {
 
-    res.send(req.params.id);
+    Event.findOne({'_id' : req.params.id}, function(error, events){
+        if(!events){
+            events = {
+                message: "Not found"
+            }
+        }
+        res.send(events);
+    });
 });
 module.exports = router;
