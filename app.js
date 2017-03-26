@@ -4,15 +4,36 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
-// var mongoose = require('mongoose');
-var connection = require('./db/connection.js');
 
+//mongoose and sessions
+var mongoose = require('mongoose');
+var session = require("express-session");
+var MongoStore = require("connect-mongo")(session);
+var connection = require('./db/connection.js');
+// routes
 var index = require('./routes/index');
 var api = require('./routes/api');
 var users = require('./routes/users');
 
 
 var app = express();
+
+connection.on("error", console.error.bind(console, "connection error: "));
+//use simple sessions to track log-ins
+app.use(session({
+  secret: "The great Gatsby",
+  resave: true,
+  saveUninitialized: false,
+  store: new MongoStore({
+    mongooseConnection: connection
+  })
+}));
+
+// make the user id available to the templates
+app.use(function(req,res,next){
+  res.locals.currentUser = req.session.userId;
+  next();
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
