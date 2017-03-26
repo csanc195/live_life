@@ -76,9 +76,9 @@ router.post('/events/upvote', middleware.checkIfLoggedIn, function(req, res, nex
             thisEvent.upVote +=1;
             thisEvent.save(function(error, resp){
                 if(error){
-                    return res.send({error: "No errors", sc: thisEvent.upVote});
+                    return res.send({error: "No errors", score: thisEvent.upVote});
                 }else{
-                    return res.send({error: null, sc: thisEvent.upVote});
+                    return res.send({error: null, score: thisEvent.upVote});
                 }
             });
         }
