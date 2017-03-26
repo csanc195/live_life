@@ -9,15 +9,16 @@ var Event = require('../models/event.js');
 var router = express.Router();
 
 /* GET home page. */
-router.post('/new', function(req, res, next) {
+router.post('/events/new', function(req, res, next) {
 
     var newEvent = new Event(
         {
             name: req.body.name,
             description: req.body.description,
             zip: req.body.zip,
+            upVote: 0,
+            downVote: 0,
             timeStamp: new Date
-
         }
     );
     console.log(newEvent);
@@ -41,13 +42,54 @@ router.get('/events/:zip', function(req, res, next) {
 
 router.get('/events/:id', function(req, res, next) {
 
-    Event.findOne({'_id' : req.params.id}, function(error, events){
+    Event.find({'_id' : req.params.id}, function(error, events){
         if(!events){
             events = {
-                message: "Not found"
+                message: "Event not found"
             }
         }
         res.send(events);
     });
 });
+
+router.post('/events/upvote', function(req, res, next) {
+    console.log("The id entered was: " + req.params.id);
+
+    Event.findOne({'_id' : req.body.id}, function(error, thisEvent){
+        if(!thisEvent){
+            console.log("No events found with this id.");
+            return res.send({error: "No event found with matching id!"});
+        } else {
+            thisEvent.upVote +=1;
+            thisEvent.save(function(error, resp){
+                if(error){
+                    return next(error);
+                }else{
+                    return res.send("Event created!")
+                }
+            });
+        }
+    });
+});
+
+router.post('/events/downvote', function(req, res, next) {
+    console.log("The id entered was: " + req.params.id);
+
+    Event.findOne({'_id' : req.body.id}, function(error, thisEvent){
+        if(!thisEvent){
+            console.log("No events found with this id.");
+            return res.send({error: "No event found with matching id!"});
+        } else {
+            thisEvent.downVote +=1;
+            thisEvent.save(function(error, resp){
+                if(error){
+                    return next(error);
+                }else{
+                    return res.send("Event created!")
+                }
+            });
+        }
+    });
+});
+
 module.exports = router;

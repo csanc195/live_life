@@ -15,7 +15,14 @@ var EventSchema = new mongoose.Schema({
     	required:true,
     	trim:true,
 	},
-
+	upVote: {
+	    type: Number,
+	    required: true
+	},
+	downVote: {
+    	    type: Number,
+    	    required: true
+    },
 	timeStamp: {
 		type: Date,
 		required: true,
