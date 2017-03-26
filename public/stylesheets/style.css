@@ -17,4 +17,7 @@ a {
 .list-group-item {
   height: 40px; }
 
+.active-thumb {
+  cursor: pointer; }
+
 /*# sourceMappingURL=style.css.map */
