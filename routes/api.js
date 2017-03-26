@@ -69,7 +69,6 @@ router.post('/events/upvote', middleware.checkIfLoggedIn, function(req, res, nex
 
     Event.findOne({'_id' : req.body.id}, function(error, thisEvent){
         if(!thisEvent){
-            console.log("No events found with this id.");
             return res.send({error: "No event found with matching id!"});
         } else {
 
@@ -92,15 +91,14 @@ router.post('/events/downvote', middleware.checkIfLoggedIn, function(req, res, n
 
     Event.findOne({'_id' : req.body.id}, function(error, thisEvent){
         if(!thisEvent){
-            console.log("No events found with this id.");
             return res.send({error: "No event found with matching id!"});
         } else {
             thisEvent.downVote +=1;
             thisEvent.save(function(error, resp){
                 if(error){
-                    return next(error);
+                    return res.send({error: "No errors", score: thisEvent.downVote});
                 }else{
-                    return res.send("Event was upvoted!")
+                    return res.send({error: null, score: thisEvent.downVote});
                 }
             });
         }
