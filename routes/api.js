@@ -4,8 +4,7 @@
 var express = require('express');
 var db = require('../db/connection.js');
 var Event = require('../models/event.js');
-
-
+var middleware = require("../middleware/middleware.js");
 
 var router = express.Router();
 
@@ -29,7 +28,6 @@ router.post('/events/new', function(req, res, next) {
     newEvent.save(function(error, resp){
 
         if(error){
-            console.log(error.errors);
             return next(error);
         }else{
             return res.send("Event created!")
@@ -65,7 +63,7 @@ router.get('/events/:id', function(req, res, next) {
 /**
  * This mapping allows to up vote and event given its id
  */
-router.post('/events/upvote', function(req, res, next) {
+router.post('/events/upvote', middleware.checkIfLoggedIn, function(req, res, next) {
 
     //var clientIp = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 
@@ -74,13 +72,13 @@ router.post('/events/upvote', function(req, res, next) {
             console.log("No events found with this id.");
             return res.send({error: "No event found with matching id!"});
         } else {
-            console.log(req.connection.remoteaddress);
+
             thisEvent.upVote +=1;
             thisEvent.save(function(error, resp){
                 if(error){
-                    return next(error);
+                    return res.send({error: "No errors", sc: thisEvent.upVote});
                 }else{
-                    return res.send("Event was upvoted!")
+                    return res.send({error: null, sc: thisEvent.upVote});
                 }
             });
         }
@@ -90,7 +88,7 @@ router.post('/events/upvote', function(req, res, next) {
 /**
  * This mapping allows to down vote and event given its id
  */
-router.post('/events/downvote', function(req, res, next) {
+router.post('/events/downvote', middleware.checkIfLoggedIn, function(req, res, next) {
 
     Event.findOne({'_id' : req.body.id}, function(error, thisEvent){
         if(!thisEvent){

@@ -21,7 +21,9 @@ var UserSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true
-    }
+    },
+    upVotes : { type : Array , "default" : [] },
+    downVotes : { type : Array , "default" : [] }
 });
 
 //Authenticate imput against database documents

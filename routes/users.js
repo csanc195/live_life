@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var User = require('../models/User.js');
+var middleware = require("../middleware/middleware.js");
 
 /* GET users listing. */
 router.post('/signup', function(req, res, next) {
@@ -33,6 +34,7 @@ router.post('/signup', function(req, res, next) {
       }else{
         //requests the user id from the db and makes it the current session id
         req.session.userId = user._id;
+        res.send("User created successfully!");
       }
     });
 
@@ -43,5 +45,44 @@ router.post('/signup', function(req, res, next) {
     return next(err);
   }
 });
+
+/**
+ * This request mapping allows to log in the app using the email and password provided
+ * through the payload.
+ */
+router.post('/login', function(req, res, next) {
+  if(req.body.email && req.body.password){
+    User.authenticate(req.body.email, req.body.password, function(error, user){
+      if(error || !user){
+        var err = new Error("Wrong email or password");
+        err.status = 401;
+        return next(err);
+      }else{
+        req.session.userId = user._id;
+        res.send("User authenticated");
+        //return res.redirect("/profile");
+      }
+    });
+  }else{
+    var err = new Error("Both fields Email and password are required!");
+    err.status = 401;
+    return next(err);
+  }
+});
+
+//GET logout
+router.post("/logout", function(req,res,next){
+  if(req.session){
+    //delete the session object
+    req.session.destroy(function(err){
+      if(err){
+        return next(err);
+      }else{
+        res.send("User logged out!");
+      }
+    });
+  }
+});
+
 
 module.exports = router;
