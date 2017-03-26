@@ -106,4 +106,28 @@ router.post('/events/downvote', function(req, res, next) {
     });
 });
 
+/**
+ * This mapping allows to create an Anonymous user, by providing the needed parameters
+ * in the payload.
+ */
+router.post('/events/new', function(req, res, next) {
+
+    var newAnnUser = new AnnUser(
+        {
+            userIp: req.connection.remoteAddress,
+            upVotedPosts: [],
+            downVotedPosts: []
+        }
+    );
+
+    newAnnUser.save(function(error, resp){
+
+        if(error){
+            console.log(error.errors);
+            return next(error);
+        }else{
+            return res.send("Event created!")
+        }
+    });
+});
 module.exports = router;
