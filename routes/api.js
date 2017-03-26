@@ -10,7 +10,7 @@ var AnnUser = require('../models/annUser.js');
 var router = express.Router();
 
 /**
- * This mapping allows to create a Post, by providing the needed parameters
+ * This mapping allows to create an Event, by providing the needed parameters
  * in the payload.
  */
 router.post('/events/new', function(req, res, next) {
