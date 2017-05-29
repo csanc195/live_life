@@ -85,13 +85,14 @@ function getEevents(zip) {
             var li = "<li class=\'list-group-item\' id=\'"+ api_res[i]._id +
                 "\'> <div class=\'col-xs-6\'>" + api_res[i].name +
                 "</div><div class=\'col-xs-offset-2 col-xs-1\'>" +
-                "<span class=\'glyphicon glyphicon-thumbs-up active-thumb \' aria-hidden=\'true\'>" +
+                "<span class=\'glyphicon glyphicon-thumbs-up active-thumb \' data-up=\'true\' aria-hidden=\'true\'>" +
                 "</span></div><div class=\'col-xs-1\'>" + api_res[i].upVote +
                 "</div><div class=\'col-xs-1\'>" +
-                "<span class=\'glyphicon glyphicon-thumbs-down active-thumb\' aria-hidden=\'true\'></span>" +
-                "</div><div class=\'col-xs-1\'>" + api_res[i].downVote +"</div>" + "</li>";
+                "<span class=\'glyphicon glyphicon-thumbs-down active-thumb\' data-up=\'false\' aria-hidden=\'true\'>" +
+                "</span>" + "</div><div class=\'col-xs-1\'>" + api_res[i].downVote +"</div>" + "</li>";
 
             $('#events').append(li);
+            $('#zip').val(zip);
         }
 
     });
@@ -103,11 +104,11 @@ function getEevents(zip) {
 /**********************************************************************************************************************/
 
 /*UPDATE LIKES*/
-body.on('click','.glyphicon-thumbs-up', function () {
+body.on('click','.active-thumb', function () {
     var thumb_up = $(this);
     var score = thumb_up.parent().next();
     var id_upvote = thumb_up.parent().parent().attr('id');
-    var api_key = "api/events/upvote";
+    var api_key = (thumb_up.attr('data-up') === "true")?"api/events/upvote" : "api/events/downvote" ;
 
     $.ajax({
         url: api_key,
@@ -117,14 +118,10 @@ body.on('click','.glyphicon-thumbs-up', function () {
 
             if(data.error === null){
                 score.text(data.score);
+                thumb_up.removeClass('active-thumb');
             }
         }
 
-
-
-
-
     });
-
-
 });
+

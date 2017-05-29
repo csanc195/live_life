@@ -54,7 +54,7 @@ router.get('/events/:id', function(req, res, next) {
 
     Event.find({'_id' : req.params.id}, function(error, events){
         if(!events){
-            res.send({message: "Event not found"});
+            res.send({message: " Event not found"});
         }
         res.send(events);
     });
@@ -63,7 +63,7 @@ router.get('/events/:id', function(req, res, next) {
 /**
  * This mapping allows to up vote and event given its id
  */
-router.post('/events/upvote', middleware.checkIfLoggedIn, function(req, res, next) {
+router.post('/events/upvote',  function(req, res, next) {
 
     //var clientIp = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
 
@@ -87,7 +87,7 @@ router.post('/events/upvote', middleware.checkIfLoggedIn, function(req, res, nex
 /**
  * This mapping allows to down vote and event given its id
  */
-router.post('/events/downvote', middleware.checkIfLoggedIn, function(req, res, next) {
+router.post('/events/downvote', function(req, res, next) {
 
     Event.findOne({'_id' : req.body.id}, function(error, thisEvent){
         if(!thisEvent){
